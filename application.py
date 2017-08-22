@@ -1,12 +1,18 @@
 from flask import Flask
 from sqlalchemy import create_engine
 from database_setup import Base, User, Category, Item
+from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 
-#Connect to database opencatalog.db
+# Connect to database opencatalog.db
 engine = create_engine('sqlite:///opencatalog.db')
 Base.metadata.bind = engine
+
+# Create database session
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
+
 
 # Home Page
 @app.route('/')
