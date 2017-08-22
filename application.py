@@ -1,7 +1,12 @@
 from flask import Flask
+from sqlalchemy import create_engine
+from database_setup import Base, User, Category, Item
 
 app = Flask(__name__)
 
+#Connect to database opencatalog.db
+engine = create_engine('sqlite:///opencatalog.db')
+Base.metadata.bind = engine
 
 # Home Page
 @app.route('/')
