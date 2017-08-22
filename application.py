@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from sqlalchemy import create_engine
 from database_setup import Base, User, Category, Item
 from sqlalchemy.orm import sessionmaker
@@ -18,58 +18,58 @@ session = DBSession()
 @app.route('/')
 @app.route('/catalog')
 def show_categories():
-    return "Show Category"
+    return render_template('categories.html')
 
 
 # Category Items
 @app.route('/catalog/<int:category_id>')
 @app.route('/catalog/<int:category_id>/items')
 def show_items(category_id):
-    return "Show Items"
+    return render_template('items.html')
 
 
 # Operations on Category
 # Add Category
 @app.route('/catalog/add')
 def add_category():
-    return "Add category"
+    return render_template('add_category.html')
 
 
 # Edit Category
 @app.route('/catalog/<int:category_id>/edit')
 def edit_category(category_id):
-    return "Edit category"
+    return render_template('edit_category.html')
 
 
 # Delete Category
 @app.route('/catalog/<int:category_id>/delete')
 def delete_category(category_id):
-    return "Delete category"
+    return render_template('delete_category.html')
 
 
 # Operations on Item
 # Add Item
 @app.route('/catalog/<int:category_id>/add')
 def add_item(category_id):
-    return "Add Item"
+    return render_template('add_item.html')
 
 
 # Edit Item
 @app.route('/catalog/<int:category_id>/item/<int:item_id>/edit')
 def edit_item(item_id):
-    return "Edit Item"
+    return render_template('edit_item.html')
 
 
 # Delete Item
 @app.route('/catalog/<int:category_id>/item/<int:item_id>/delete')
 def delete_item(item_id):
-    return "Delete Item"
+    return render_template('delete_item.html')
 
 
 # Login
 @app.route('/login')
 def login():
-    return "Login Page"
+    return render_template('login.html')
 
 
 # Logout
