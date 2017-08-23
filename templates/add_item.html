@@ -1,0 +1,14 @@
+{% extends "default_layout.html" %}
+{% block content %}
+    <div class="row card">
+        <h5>Add Item Details for Category 1</h5>
+        <form>
+            <label>Title</label>
+            <input type="text" name="title" maxlength="60">
+            <label>Description</label>
+            <textarea name="description" maxlength="260"></textarea>
+            <input type="submit" value="Create">
+        </form>
+        <a href="">Back</a>
+    </div>
+{% endblock %}
