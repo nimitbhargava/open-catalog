@@ -47,6 +47,12 @@ def delete_category(category_id):
     return render_template('delete_category.html')
 
 
+# View Item
+@app.route('/catalog/<int:category_id>/item/<int:item_id>')
+def view_item(item_id):
+    return render_template('item.html')
+
+
 # Operations on Item
 # Add Item
 @app.route('/catalog/<int:category_id>/add')
