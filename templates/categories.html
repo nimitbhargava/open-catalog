@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "default_layout.html" %}
+{% block content %}
+    <div class="card">
+        <div class="row">
+            <div class="col s12 m4 offset-m1">
+                <ul>
+                    <li><a href="#!">Category 1</a></li>
+                    <li><a href="#!">Category 2</a></li>
+                    <li><a href="#!">Category 3</a></li>
+                    <li><a href="#!">Category 4</a></li>
+                    <li><a href="#!">Category 5</a></li>
+                </ul>
+            </div>
+            <div class="col s12 m7">
+                <ul>
+                    <li><a href="#!">Item 1</a></li>
+                    <li><a href="#!">Item 2</a></li>
+                    <li><a href="#!">Item 3</a></li>
+                    <li><a href="#!">Item 4</a></li>
+                    <li><a href="#!">Item 5</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 offset-m5">
+                <a href="#" class="btn">Add Items</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
