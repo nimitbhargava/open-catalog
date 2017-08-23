@@ -62,13 +62,13 @@ def add_item(category_id):
 
 # Edit Item
 @app.route('/catalog/<int:category_id>/item/<int:item_id>/edit')
-def edit_item(item_id):
+def edit_item(category_id, item_id):
     return render_template('edit_item.html')
 
 
 # Delete Item
 @app.route('/catalog/<int:category_id>/item/<int:item_id>/delete')
-def delete_item(item_id):
+def delete_item(category_id, item_id):
     return render_template('delete_item.html')
 
 
