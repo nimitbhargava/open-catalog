@@ -80,13 +80,19 @@ def add_item(category_id):
 
 
 # Edit Item
-@app.route('/catalog/<int:category_id>/item/<int:item_id>/edit')
+@app.route('/catalog/<int:category_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def edit_item(category_id, item_id):
-    item = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
-    if item is None:
+    editItem = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
+    if editItem is None:
         return "Incorrect request"
+    if request.method == 'POST':
+        editItem.title = request.form['title'] if request.form['title'] else editItem.title
+        editItem.description = request.form['description'] if request.form['description'] else editItem.description
+        session.add(editItem)
+        session.commit()
+        return redirect(url_for('view_item', category_id=category_id, item_id=editItem.id))
     category = session.query(Category).filter_by(id=category_id).first()
-    return render_template('edit_item.html', item=item, category=category)
+    return render_template('edit_item.html', item=editItem, category=category)
 
 
 # Delete Item

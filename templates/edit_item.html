@@ -2,7 +2,7 @@
 {% block content %}
     <div class="row card">
         <h5>Edit {{ item.title }} Details for {{ category.name }}</h5>
-        <form>
+        <form method="post">
             <label>Title</label>
             <input type="text" name="title" maxlength="60" value="{{ item.title }}">
             <label>Description</label>
