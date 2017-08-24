@@ -3,8 +3,8 @@
     <div class="row card">
         <h5>Edit {{ item.title }} Details for {{ category.name }}</h5>
         <form>
-            <label>{{ item.title }}</label>
-            <input type="text" name="title" maxlength="60" value="Item 1">
+            <label>Title</label>
+            <input type="text" name="title" maxlength="60" value="{{ item.title }}">
             <label>Description</label>
             <textarea name="description" maxlength="260">{{ item.description }}</textarea>
             <input type="submit" value="Update">
