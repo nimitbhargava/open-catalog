@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, redirect
 from sqlalchemy import create_engine
 from database_setup import Base, User, Category, Item
 from sqlalchemy.orm import sessionmaker
@@ -64,12 +64,18 @@ def view_item(category_id, item_id):
 
 # Operations on Item
 # Add Item
-@app.route('/catalog/<int:category_id>/add')
-@app.route('/catalog/<int:category_id>/item/add')
+@app.route('/catalog/<int:category_id>/add', methods=['GET', 'POST'])
+@app.route('/catalog/<int:category_id>/item/add', methods=['GET', 'POST'])
 def add_item(category_id):
     category = session.query(Category).filter_by(id=category_id).first()
     if category is None:
         return "Incorrect request"
+    if request.method == 'POST':
+        newItem = Item(title=request.form['title'], description=request.form['description'], category_id=category_id,
+                       owner_id=1)
+        session.add(newItem)
+        session.commit()
+        return redirect(url_for('show_items', category_id=category_id))
     return render_template('add_item.html', category=category)
 
 
