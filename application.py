@@ -29,10 +29,10 @@ def show_categories():
 def show_items(category_id):
     categories = session.query(Category)
     all_categories = categories.all()
-    category_name = categories.filter_by(id=category_id).first().name
+    category = categories.filter_by(id=category_id).first()
     items_of_category = session.query(Item).filter_by(category_id=category_id).all()
     return render_template('items.html', categories=all_categories, items=items_of_category,
-                           category_name=category_name)
+                           category=category)
 
 
 # Operations on Category
@@ -58,8 +58,8 @@ def delete_category(category_id):
 @app.route('/catalog/<int:category_id>/item/<int:item_id>')
 def view_item(category_id, item_id):
     item = session.query(Item).filter_by(id=item_id).first()
-    category_name = session.query(Category).filter_by(id=(item.category_id)).first().name
-    return render_template('item.html', item=item, category_name=category_name)
+    category = session.query(Category).filter_by(id=(item.category_id)).first()
+    return render_template('item.html', item=item, category=category)
 
 
 # Operations on Item
@@ -79,7 +79,8 @@ def edit_item(category_id, item_id):
     item = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
     if item is None:
         return "Incorrect request"
-    return render_template('edit_item.html', item=item)
+    category = session.query(Category).filter_by(id=category_id).first()
+    return render_template('edit_item.html', item=item, category=category)
 
 
 # Delete Item
@@ -88,7 +89,8 @@ def delete_item(category_id, item_id):
     item = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
     if item is None:
         return "Incorrect request"
-    return render_template('delete_item.html', item=item)
+    category = session.query(Category).filter_by(id=category_id).first()
+    return render_template('delete_item.html', item=item, category=category)
 
 
 # Login

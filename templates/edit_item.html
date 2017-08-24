@@ -1,7 +1,7 @@
 {% extends "default_layout.html" %}
 {% block content %}
     <div class="row card">
-        <h5>Edit Item 1 Details for Category 1</h5>
+        <h5>Edit {{ item.title }} Details for {{ category.name }}</h5>
         <form>
             <label>{{ item.title }}</label>
             <input type="text" name="title" maxlength="60" value="Item 1">
@@ -9,6 +9,6 @@
             <textarea name="description" maxlength="260">{{ item.description }}</textarea>
             <input type="submit" value="Update">
         </form>
-        <a href="">Back</a>
+        <a href="{{ url_for('view_item', category_id=category.id, item_id=item.id) }}">Back</a>
     </div>
 {% endblock %}

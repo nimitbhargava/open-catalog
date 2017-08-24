@@ -9,6 +9,6 @@
             <textarea name="description" maxlength="260"></textarea>
             <input type="submit" value="Create">
         </form>
-        <a href="">Back</a>
+        <a href="{{ url_for('show_items', category_id=category.id) }}">Back</a>
     </div>
 {% endblock %}
