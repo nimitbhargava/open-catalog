@@ -1,9 +1,9 @@
-from flask import Flask, render_template, url_for, request, redirect, jsonify, session as login_session
+from flask import Flask, render_template, url_for, request, redirect, jsonify, session as login_session, make_response
 from sqlalchemy import create_engine
 from database_setup import Base, User, Category, Item
 from sqlalchemy.orm import sessionmaker
 from config import GOOGLE_CLIENT_ID
-import random, string
+import random, string, json
 
 app = Flask(__name__)
 
@@ -14,6 +14,28 @@ Base.metadata.bind = engine
 # Create database session
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+# User Helper Functions
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session['email'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
 
 
 # Home Page
