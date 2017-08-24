@@ -96,11 +96,15 @@ def edit_item(category_id, item_id):
 
 
 # Delete Item
-@app.route('/catalog/<int:category_id>/item/<int:item_id>/delete')
+@app.route('/catalog/<int:category_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
 def delete_item(category_id, item_id):
     item = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
     if item is None:
         return "Incorrect request"
+    if request.method == 'POST':
+        session.delete(item)
+        session.commit()
+        return redirect(url_for('show_items', category_id=category_id))
     category = session.query(Category).filter_by(id=category_id).first()
     return render_template('delete_item.html', item=item, category=category)
 

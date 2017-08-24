@@ -2,8 +2,8 @@
 {% block content %}
     <div class="row card">
         <h5>Are you sure you want to delete {{ item.title }}?</h5>
-        <a href="" class="btn">Nope</a>
-        <form>
+        <a href="{{ url_for('view_item', category_id=category.id, item_id=item.id) }}" class="btn">Nope</a>
+        <form method="post">
             <input type="submit" value="Yes" class="btn">
         </form>
         <a href="{{ url_for('view_item', category_id=category.id, item_id=item.id) }}" class="btn">Back</a>
