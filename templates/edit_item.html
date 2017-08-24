@@ -3,10 +3,10 @@
     <div class="row card">
         <h5>Edit Item 1 Details for Category 1</h5>
         <form>
-            <label>Title</label>
+            <label>{{ item.title }}</label>
             <input type="text" name="title" maxlength="60" value="Item 1">
             <label>Description</label>
-            <textarea name="description" maxlength="260">Lorem Ipsum?</textarea>
+            <textarea name="description" maxlength="260">{{ item.description }}</textarea>
             <input type="submit" value="Update">
         </form>
         <a href="">Back</a>

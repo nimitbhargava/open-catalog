@@ -72,7 +72,10 @@ def add_item(category_id):
 # Edit Item
 @app.route('/catalog/<int:category_id>/item/<int:item_id>/edit')
 def edit_item(category_id, item_id):
-    return render_template('edit_item.html')
+    item = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
+    if item is None:
+        return "Incorrect request"
+    return render_template('edit_item.html', item=item)
 
 
 # Delete Item
