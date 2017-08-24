@@ -20,14 +20,19 @@ session = DBSession()
 def show_categories():
     categories = session.query(Category).all()
     latest_5_items = session.query(Item).all()
-    return render_template('categories.html', categories = categories, items = latest_5_items)
+    return render_template('categories.html', categories=categories, items=latest_5_items)
 
 
 # Category Items
 @app.route('/catalog/<int:category_id>')
 @app.route('/catalog/<int:category_id>/items')
 def show_items(category_id):
-    return render_template('items.html')
+    categories = session.query(Category)
+    all_categories = categories.all()
+    category_name = categories.filter_by(id=category_id).first().name
+    items_of_category = session.query(Item).filter_by(category_id=category_id).all()
+    return render_template('items.html', categories=all_categories, items=items_of_category,
+                           category_name=category_name)
 
 
 # Operations on Category
