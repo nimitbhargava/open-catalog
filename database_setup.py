@@ -37,6 +37,11 @@ class Item(Base):
     owner_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
+    @property
+    def serialize(self):
+        """Return Category object data in serializable format"""
+        return {'id': self.id, 'title': self.title, 'description': self.description}
+
 
 engine = create_engine('sqlite:///opencatalog.db')
 Base.metadata.create_all(engine)

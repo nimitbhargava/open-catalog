@@ -144,7 +144,10 @@ def returnAllCategories():
 # Return with all the items of a specific category
 @app.route('/catalog/<int:category_id>/JSON')
 def returnAllItemsofCategory(category_id):
-    return "Return with all the items of a specific category"
+    items = session.query(Item).filter_by(category_id=category_id).all()
+    if items is None:
+        return "Incorrect request"
+    return jsonify(items=[item.serialize for item in items])
 
 
 # Return with all the details of an item
