@@ -137,7 +137,8 @@ def gdisconnect():
 # Return with all the categories
 @app.route('/catalog/JSON')
 def returnAllCategories():
-    return "Return with all the categories"
+    categories = session.query(Category).all()
+    return jsonify(categories=[category.serialize for category in categories])
 
 
 # Return with all the items of a specific category
