@@ -1,7 +1,9 @@
-from flask import Flask, render_template, url_for, request, redirect, jsonify
+from flask import Flask, render_template, url_for, request, redirect, jsonify, session as login_session
 from sqlalchemy import create_engine
 from database_setup import Base, User, Category, Item
 from sqlalchemy.orm import sessionmaker
+from config import GOOGLE_CLIENT_ID
+import random, string
 
 app = Flask(__name__)
 
@@ -112,7 +114,10 @@ def delete_item(category_id, item_id):
 # Login
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    # Create anti-forgery state token
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session['state'] = state
+    return render_template('login.html', STATE=state, client_id=GOOGLE_CLIENT_ID)
 
 
 # Logout
@@ -122,7 +127,7 @@ def logout():
 
 
 # Google Login
-@app.route('/gconnect')
+@app.route('/gconnect', methods=['POST'])
 def gconnect():
     return "gconnect"
 
@@ -160,5 +165,6 @@ def returnItem(category_id, item_id):
 
 
 if __name__ == '__main__':
+    app.secret_key = 'ultra_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=8000)
