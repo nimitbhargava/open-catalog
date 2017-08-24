@@ -153,7 +153,10 @@ def returnAllItemsofCategory(category_id):
 # Return with all the details of an item
 @app.route('/catalog/<int:category_id>/item/<int:item_id>/JSON')
 def returnItem(category_id, item_id):
-    return "Return with all the details of an item"
+    item = session.query(Item).filter_by(category_id=category_id, id=item_id)
+    if item is None:
+        return "Incorrect request"
+    return jsonify(items=[item.serialize for item in item])
 
 
 if __name__ == '__main__':
