@@ -1,7 +1,7 @@
 {% extends "default_layout.html" %}
 {% block content %}
     <div class="row card">
-        <h5>Are you sure you want to delete Item 1?</h5>
+        <h5>Are you sure you want to delete {{ item.title }}?</h5>
         <a href="" class="btn">Nope</a>
         <form>
             <input type="submit" value="Yes" class="btn">
