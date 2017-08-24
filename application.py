@@ -56,8 +56,10 @@ def delete_category(category_id):
 
 # View Item
 @app.route('/catalog/<int:category_id>/item/<int:item_id>')
-def view_item(item_id):
-    return render_template('item.html')
+def view_item(category_id, item_id):
+    item = session.query(Item).filter_by(id=item_id).first()
+    category_name = session.query(Category).filter_by(id=(item.category_id)).first().name
+    return render_template('item.html', item=item, category_name=category_name)
 
 
 # Operations on Item
