@@ -65,8 +65,12 @@ def view_item(category_id, item_id):
 # Operations on Item
 # Add Item
 @app.route('/catalog/<int:category_id>/add')
+@app.route('/catalog/<int:category_id>/item/add')
 def add_item(category_id):
-    return render_template('add_item.html')
+    category = session.query(Category).filter_by(id=category_id).first()
+    if category is None:
+        return "Incorrect request"
+    return render_template('add_item.html', category=category)
 
 
 # Edit Item

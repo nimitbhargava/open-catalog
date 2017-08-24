@@ -1,7 +1,7 @@
 {% extends "default_layout.html" %}
 {% block content %}
     <div class="row card">
-        <h5>Add Item Details for Category 1</h5>
+        <h5>Add Item Details for {{ category.name }}</h5>
         <form>
             <label>Title</label>
             <input type="text" name="title" maxlength="60">
