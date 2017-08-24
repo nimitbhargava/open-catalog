@@ -133,6 +133,25 @@ def gdisconnect():
     return "g disconnect Page"
 
 
+# APIs
+# Return with all the categories
+@app.route('/catalog/JSON')
+def returnAllCategories():
+    return "Return with all the categories"
+
+
+# Return with all the items of a specific category
+@app.route('/catalog/<int:category_id>/JSON')
+def returnAllItemsofCategory(category_id):
+    return "Return with all the items of a specific category"
+
+
+# Return with all the details of an item
+@app.route('/catalog/<int:category_id>/item/<int:item_id>/JSON')
+def returnItem(category_id, item_id):
+    return "Return with all the details of an item"
+
+
 if __name__ == '__main__':
     app.debug = True
     app.run(host='0.0.0.0', port=8000)
