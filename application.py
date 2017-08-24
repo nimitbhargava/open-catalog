@@ -18,7 +18,9 @@ session = DBSession()
 @app.route('/')
 @app.route('/catalog')
 def show_categories():
-    return render_template('categories.html')
+    categories = session.query(Category).all()
+    latest_5_items = session.query(Item).all()
+    return render_template('categories.html', categories = categories, items = latest_5_items)
 
 
 # Category Items
