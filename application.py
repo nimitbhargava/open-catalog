@@ -3,7 +3,11 @@ from flask import session as login_session, make_response
 from sqlalchemy import create_engine
 from database_setup import Base, User, Category, Item
 from sqlalchemy.orm import sessionmaker
-import random, string, json, httplib2, requests
+import random
+import string
+import json
+import httplib2
+import requests
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
 app = Flask(__name__)
