@@ -9,9 +9,11 @@
         <div class="col s12 m4 center-align">
             <a href="{{ url_for('show_categories') }}"> Home Page</a>
         </div>
-        <div class="col s12 m4 right-align">
-            <a href="{{ url_for('edit_item', category_id=category.id, item_id=item.id) }}">Edit</a> |
-            <a href="{{ url_for('delete_item', category_id=category.id, item_id=item.id) }}">Delete</a>
-        </div>
+        {% if can_modify %}
+            <div class="col s12 m4 right-align">
+                <a href="{{ url_for('edit_item', category_id=category.id, item_id=item.id) }}">Edit</a> |
+                <a href="{{ url_for('delete_item', category_id=category.id, item_id=item.id) }}">Delete</a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

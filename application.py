@@ -86,7 +86,9 @@ def delete_category(category_id):
 def view_item(category_id, item_id):
     item = session.query(Item).filter_by(id=item_id).first()
     category = session.query(Category).filter_by(id=(item.category_id)).first()
-    return render_template('item.html', item=item, category=category)
+    can_modify = 'username' in login_session and session.query(Item).filter_by(id=item_id).first().owner_id == \
+                                                 login_session['user_id']
+    return render_template('item.html', item=item, category=category, can_modify=can_modify)
 
 
 # Operations on Item
@@ -116,7 +118,7 @@ def edit_item(category_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
     editItem = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
-    if editItem is None:
+    if editItem is None or editItem.owner_id != login_session['user_id']:
         return "Incorrect request"
     if request.method == 'POST':
         editItem.title = request.form['title'] if request.form['title'] else editItem.title
@@ -135,7 +137,7 @@ def delete_item(category_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
     item = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
-    if item is None:
+    if item is None or item.owner_id != login_session['user_id']:
         return "Incorrect request"
     if request.method == 'POST':
         session.delete(item)
