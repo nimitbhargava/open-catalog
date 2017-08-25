@@ -2,7 +2,6 @@ from flask import Flask, render_template, url_for, request, redirect, jsonify, s
 from sqlalchemy import create_engine
 from database_setup import Base, User, Category, Item
 from sqlalchemy.orm import sessionmaker
-from config import GOOGLE_CLIENT_ID
 import random, string, json, httplib2, requests
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
@@ -153,7 +152,7 @@ def login():
     # Create anti-forgery state token
     state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
     login_session['state'] = state
-    return render_template('login.html', STATE=state, client_id=GOOGLE_CLIENT_ID)
+    return render_template('login.html', STATE=state, client_id=CLIENT_ID)
 
 
 # Logout
