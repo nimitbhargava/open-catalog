@@ -102,7 +102,7 @@ def add_item(category_id):
         return "Incorrect request"
     if request.method == 'POST':
         newItem = Item(title=request.form['title'], description=request.form['description'], category_id=category_id,
-                       owner_id=1)
+                       owner_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
         return redirect(url_for('show_items', category_id=category_id))
