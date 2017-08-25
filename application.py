@@ -94,6 +94,9 @@ def view_item(category_id, item_id):
 @app.route('/catalog/<int:category_id>/add', methods=['GET', 'POST'])
 @app.route('/catalog/<int:category_id>/item/add', methods=['GET', 'POST'])
 def add_item(category_id):
+    # Check if user is logged in
+    if 'username' not in login_session:
+        return redirect('/login')
     category = session.query(Category).filter_by(id=category_id).first()
     if category is None:
         return "Incorrect request"
@@ -109,6 +112,9 @@ def add_item(category_id):
 # Edit Item
 @app.route('/catalog/<int:category_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def edit_item(category_id, item_id):
+    # Check if user is logged in
+    if 'username' not in login_session:
+        return redirect('/login')
     editItem = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
     if editItem is None:
         return "Incorrect request"
@@ -125,6 +131,9 @@ def edit_item(category_id, item_id):
 # Delete Item
 @app.route('/catalog/<int:category_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
 def delete_item(category_id, item_id):
+    # Check if user is logged in
+    if 'username' not in login_session:
+        return redirect('/login')
     item = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
     if item is None:
         return "Incorrect request"
