@@ -40,7 +40,8 @@ class Item(Base):
     @property
     def serialize(self):
         """Return Category object data in serializable format"""
-        return {'id': self.id, 'title': self.title, 'description': self.description}
+        return {'id': self.id, 'title': self.title,
+                'description': self.description}
 
 
 engine = create_engine('sqlite:///opencatalog.db')

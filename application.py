@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for, request, redirect, jsonify, session as login_session, make_response
+from flask import Flask, render_template, url_for, request, redirect, jsonify
+from flask import session as login_session, make_response
 from sqlalchemy import create_engine
 from database_setup import Base, User, Category, Item
 from sqlalchemy.orm import sessionmaker
@@ -7,7 +8,8 @@ from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
 app = Flask(__name__)
 
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web'][
+    'client_id']
 
 # Connect to database opencatalog.db
 engine = create_engine('sqlite:///opencatalog.db')
@@ -20,7 +22,8 @@ session = DBSession()
 
 # User Helper Functions
 def createUser(login_session):
-    newUser = User(name=login_session['username'], email=login_session['email'])
+    newUser = User(name=login_session['username'],
+                   email=login_session['email'])
     session.add(newUser)
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
@@ -46,7 +49,8 @@ def getUserID(email):
 def show_categories():
     categories = session.query(Category).all()
     latest_5_items = session.query(Item).all()
-    return render_template('categories.html', categories=categories, items=latest_5_items)
+    return render_template('categories.html', categories=categories,
+                           items=latest_5_items)
 
 
 # Category Items
@@ -56,8 +60,10 @@ def show_items(category_id):
     categories = session.query(Category)
     all_categories = categories.all()
     category = categories.filter_by(id=category_id).first()
-    items_of_category = session.query(Item).filter_by(category_id=category_id).all()
-    return render_template('items.html', categories=all_categories, items=items_of_category,
+    items_of_category = session.query(Item).filter_by(
+        category_id=category_id).all()
+    return render_template('items.html', categories=all_categories,
+                           items=items_of_category,
                            category=category)
 
 
@@ -85,9 +91,10 @@ def delete_category(category_id):
 def view_item(category_id, item_id):
     item = session.query(Item).filter_by(id=item_id).first()
     category = session.query(Category).filter_by(id=(item.category_id)).first()
-    can_modify = 'username' in login_session and session.query(Item).filter_by(id=item_id).first().owner_id == \
-                                                 login_session['user_id']
-    return render_template('item.html', item=item, category=category, can_modify=can_modify)
+    can_modify = 'username' in login_session and session.query(Item).filter_by(
+        id=item_id).first().owner_id == login_session['user_id']
+    return render_template('item.html', item=item, category=category,
+                           can_modify=can_modify)
 
 
 # Operations on Item
@@ -102,7 +109,9 @@ def add_item(category_id):
     if category is None:
         return "Incorrect request"
     if request.method == 'POST':
-        newItem = Item(title=request.form['title'], description=request.form['description'], category_id=category_id,
+        newItem = Item(title=request.form['title'],
+                       description=request.form['description'],
+                       category_id=category_id,
                        owner_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
@@ -111,31 +120,38 @@ def add_item(category_id):
 
 
 # Edit Item
-@app.route('/catalog/<int:category_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
+@app.route('/catalog/<int:category_id>/item/<int:item_id>/edit',
+           methods=['GET', 'POST'])
 def edit_item(category_id, item_id):
     # Check if user is logged in
     if 'username' not in login_session:
         return redirect('/login')
-    editItem = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
+    editItem = session.query(Item).filter_by(id=item_id,
+                                             category_id=category_id).first()
     if editItem is None or editItem.owner_id != login_session['user_id']:
         return "Incorrect request"
     if request.method == 'POST':
-        editItem.title = request.form['title'] if request.form['title'] else editItem.title
-        editItem.description = request.form['description'] if request.form['description'] else editItem.description
+        editItem.title = request.form['title'] if request.form[
+            'title'] else editItem.title
+        editItem.description = request.form['description'] if request.form[
+            'description'] else editItem.description
         session.add(editItem)
         session.commit()
-        return redirect(url_for('view_item', category_id=category_id, item_id=editItem.id))
+        return redirect(
+            url_for('view_item', category_id=category_id, item_id=editItem.id))
     category = session.query(Category).filter_by(id=category_id).first()
     return render_template('edit_item.html', item=editItem, category=category)
 
 
 # Delete Item
-@app.route('/catalog/<int:category_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
+@app.route('/catalog/<int:category_id>/item/<int:item_id>/delete',
+           methods=['GET', 'POST'])
 def delete_item(category_id, item_id):
     # Check if user is logged in
     if 'username' not in login_session:
         return redirect('/login')
-    item = session.query(Item).filter_by(id=item_id, category_id=category_id).first()
+    item = session.query(Item).filter_by(id=item_id,
+                                         category_id=category_id).first()
     if item is None or item.owner_id != login_session['user_id']:
         return "Incorrect request"
     if request.method == 'POST':
@@ -150,7 +166,9 @@ def delete_item(category_id, item_id):
 @app.route('/login')
 def login():
     # Create anti-forgery state token
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    state = ''.join(
+        random.choice(string.ascii_uppercase + string.digits) for x in
+        xrange(32))
     login_session['state'] = state
     return render_template('login.html', STATE=state, client_id=CLIENT_ID)
 
@@ -187,13 +205,16 @@ def gconnect():
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
-        response = make_response(json.dumps('Failed to upgrade the authorization code.'), 401)
+        response = make_response(
+            json.dumps('Failed to upgrade the authorization code.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
     # Check that the access token is valid.
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
+    url = (
+        'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
+        % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
 
@@ -206,13 +227,15 @@ def gconnect():
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
-        response = make_response(json.dumps("Token's user ID doesn't match given user ID."), 401)
+        response = make_response(
+            json.dumps("Token's user ID doesn't match given user ID."), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
     # Verify that the access token is valid for this app.
     if result['issued_to'] != CLIENT_ID:
-        response = make_response(json.dumps("Token's client ID does not match app's."), 401)
+        response = make_response(
+            json.dumps("Token's client ID does not match app's."), 401)
         print
         "Token's client ID does not match app's."
         response.headers['Content-Type'] = 'application/json'
@@ -222,7 +245,8 @@ def gconnect():
     stored_gplus_id = login_session.get('gplus_id')
 
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'), 200)
+        response = make_response(
+            json.dumps('Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -257,7 +281,8 @@ def gdisconnect():
     access_token = login_session.get('access_token')
 
     if access_token is None:
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(json.dumps('Current user not connected.'),
+                                 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -267,7 +292,8 @@ def gdisconnect():
 
     if result['status'] != '200':
         # For whatever reason, the given token was invalid.
-        response = make_response(json.dumps('Failed to revoke token for given user.'), 400)
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.'), 400)
         response.headers['Content-Type'] = 'application/json'
         return response
 
